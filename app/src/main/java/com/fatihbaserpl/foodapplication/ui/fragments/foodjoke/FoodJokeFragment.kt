@@ -1,4 +1,4 @@
-package com.fatihbaserpl.foodapplication.ui.fragments
+package com.fatihbaserpl.foodapplication.ui.fragments.foodjoke
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
