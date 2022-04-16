@@ -1,6 +1,6 @@
 package com.fatihbaserpl.foodapplication.di
 
-import com.fatihbaserpl.foodapplication.FoodRecipesApi
+import com.fatihbaserpl.foodapplication.data.network.FoodRecipesApi
 import com.fatihbaserpl.foodapplication.utils.Constants.Companion.BASE_URL
 import dagger.Module
 import dagger.Provides

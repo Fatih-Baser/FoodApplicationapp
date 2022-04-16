@@ -1,4 +1,4 @@
-package com.fatihbaserpl.foodapplication
+package com.fatihbaserpl.foodapplication.data.network
 
 
 import com.fatihbaserpl.foodapplication.models.FoodJoke
