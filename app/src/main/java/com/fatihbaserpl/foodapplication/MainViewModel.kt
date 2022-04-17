@@ -11,6 +11,7 @@ import com.fatihbaserpl.foodapplication.data.Repository
 import com.fatihbaserpl.foodapplication.models.FoodJoke
 import com.fatihbaserpl.foodapplication.models.FoodRecipe
 import com.fatihbaserpl.foodapplication.utils.NetworkResult
+import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Response
@@ -18,7 +19,7 @@ import java.lang.Exception
 import javax.inject.Inject
 
 
-//@HiltViewModel
+
 class MainViewModel @Inject constructor(
     private val repository: Repository,
     application: Application
