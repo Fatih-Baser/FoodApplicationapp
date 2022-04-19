@@ -12,6 +12,7 @@ import com.fatihbaserpl.foodapplication.utils.Constants.Companion.QUERY_DIET
 import com.fatihbaserpl.foodapplication.utils.Constants.Companion.QUERY_FILL_INGREDIENTS
 import com.fatihbaserpl.foodapplication.utils.Constants.Companion.QUERY_NUMBER
 import com.fatihbaserpl.foodapplication.utils.Constants.Companion.QUERY_TYPE
+import dagger.hilt.android.AndroidEntryPoint
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

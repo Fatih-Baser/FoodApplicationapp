@@ -7,11 +7,10 @@
         <variable
             name="result"
             type="com.fatihbaserpl.foodapplication.models.Result" />
-
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/recipesRowLayout"
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -27,13 +26,13 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:strokeColor="@color/strokeColor"
+            app:strokeColor="@color/lightMediumGray"
             app:strokeWidth="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/cardBackgroundColor">
+                android:background="@color/white">
 
                 <ImageView
                     android:id="@+id/recipe_imageView"
@@ -57,7 +56,7 @@
                     android:fontFamily="@font/courgette"
                     android:maxLines="2"
                     android:text="@{result.title}"
-                    android:textColor="@color/titleColor"
+                    android:textColor="@color/darker"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -72,8 +71,8 @@
                     android:layout_marginTop="12dp"
                     android:ellipsize="end"
                     android:maxLines="3"
-                    parseHtml="@{result.summary}"
-                    android:textColor="@color/descriptionColor"
+                    android:text="@{result.summary}"
+                    android:textColor="@color/darkGray"
                     app:layout_constraintEnd_toEndOf="@+id/title_textView"
                     app:layout_constraintStart_toStartOf="@+id/title_textView"
                     app:layout_constraintTop_toBottomOf="@+id/title_textView" />
@@ -86,8 +85,10 @@
                     android:layout_marginBottom="36dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/heart_textView"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/heart_textView"
                     app:layout_constraintTop_toBottomOf="@+id/description_textView"
+                    app:layout_constraintVertical_bias="0.0"
                     app:srcCompat="@drawable/ic_heart"
                     app:tint="@color/red" />
 
@@ -95,7 +96,8 @@
                     android:id="@+id/heart_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(result.aggregateLikes)}"
+                    android:text="100"
+                    setNumberOfLikes="@{result.aggregateLikes}"
                     android:textColor="@color/red"
                     android:textAlignment="center"
                     app:layout_constraintStart_toStartOf="@+id/description_textView"
@@ -116,7 +118,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:text="@{String.valueOf(result.readyInMinutes)}"
+                    android:text="100"
+                    setNumberOfMinutes="@{result.readyInMinutes}"
                     android:textAlignment="center"
                     android:textColor="@color/yellow"
                     app:layout_constraintStart_toEndOf="@+id/heart_textView"

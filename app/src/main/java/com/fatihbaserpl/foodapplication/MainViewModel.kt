@@ -19,32 +19,24 @@ import java.lang.Exception
 import javax.inject.Inject
 
 
-
+@HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: Repository,
     application: Application
 ) : AndroidViewModel(application) {
 
-
-    /** RETROFIT */
     var recipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
-    var searchedRecipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
-    var foodJokeResponse: MutableLiveData<NetworkResult<FoodJoke>> = MutableLiveData()
 
     fun getRecipes(queries: Map<String, String>) = viewModelScope.launch {
         getRecipesSafeCall(queries)
     }
+
     private suspend fun getRecipesSafeCall(queries: Map<String, String>) {
         recipesResponse.value = NetworkResult.Loading()
         if (hasInternetConnection()) {
             try {
                 val response = repository.remote.getRecipes(queries)
                 recipesResponse.value = handleFoodRecipesResponse(response)
-
-             //   val foodRecipe = recipesResponse.value!!.data
-             //   if(foodRecipe != null) {
-              //      offlineCacheRecipes(foodRecipe)
-                    //}
             } catch (e: Exception) {
                 recipesResponse.value = NetworkResult.Error("Recipes not found.")
             }
@@ -53,10 +45,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-
-
-
-    private fun handleFoodRecipesResponse(response: Response<FoodRecipe>): NetworkResult<FoodRecipe> {
+    private fun handleFoodRecipesResponse(response: Response<FoodRecipe>): NetworkResult<FoodRecipe>? {
         when {
             response.message().toString().contains("timeout") -> {
                 return NetworkResult.Error("Timeout")
@@ -77,24 +66,6 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun handleFoodJokeResponse(response: Response<FoodJoke>): NetworkResult<FoodJoke> {
-        return when {
-            response.message().toString().contains("timeout") -> {
-                NetworkResult.Error("Timeout")
-            }
-            response.code() == 402 -> {
-                NetworkResult.Error("API Key Limited.")
-            }
-            response.isSuccessful -> {
-                val foodJoke = response.body()
-                NetworkResult.Success(foodJoke!!)
-            }
-            else -> {
-                NetworkResult.Error(response.message())
-            }
-        }
-    }
-
     private fun hasInternetConnection(): Boolean {
         val connectivityManager = getApplication<Application>().getSystemService(
             Context.CONNECTIVITY_SERVICE
@@ -108,4 +79,5 @@ class MainViewModel @Inject constructor(
             else -> false
         }
     }
+
 }
