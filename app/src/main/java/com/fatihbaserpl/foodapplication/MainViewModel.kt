@@ -4,15 +4,15 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.fatihbaserpl.foodapplication.data.Repository
+import com.fatihbaserpl.foodapplication.data.entities.RecipesEntity
 import com.fatihbaserpl.foodapplication.models.FoodJoke
 import com.fatihbaserpl.foodapplication.models.FoodRecipe
 import com.fatihbaserpl.foodapplication.utils.NetworkResult
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.lang.Exception
@@ -24,6 +24,23 @@ class MainViewModel @Inject constructor(
     private val repository: Repository,
     application: Application
 ) : AndroidViewModel(application) {
+
+    /** Room database */
+    val readRecipes: LiveData<List<RecipesEntity>> = repository.local.readRecipes().asLiveData()
+
+
+    private fun insertRecipes(recipesEntity: RecipesEntity) =
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.local.insertRecipes(recipesEntity)
+        }
+
+
+    private fun offlineCacheRecipes(foodRecipe: FoodRecipe) {
+        val recipesEntity = RecipesEntity(foodRecipe)
+        insertRecipes(recipesEntity)
+    }
+
+    /** RETROFIT */
 
     var recipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
 
@@ -37,6 +54,11 @@ class MainViewModel @Inject constructor(
             try {
                 val response = repository.remote.getRecipes(queries)
                 recipesResponse.value = handleFoodRecipesResponse(response)
+
+                val foodRecipe = recipesResponse.value!!.data
+                if(foodRecipe != null) {
+                    offlineCacheRecipes(foodRecipe)
+                }
             } catch (e: Exception) {
                 recipesResponse.value = NetworkResult.Error("Recipes not found.")
             }

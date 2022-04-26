@@ -39,8 +39,22 @@ class RecipesFragment : Fragment() {
     ): View {
         _binding = FragmentRecipesBinding.inflate(inflater, container, false)
         setupRecyclerView()
-        requestApiData()
+        readDatabase()
         return binding.root
+    }
+
+    private fun readDatabase() {
+        lifecycleScope.launch {
+            viewModel.readRecipes.observe(viewLifecycleOwner, { database ->
+                if (database.isNotEmpty() ) {
+                    Log.d("RecipesFragment", "readDatabase called!")
+                    adapter.setData(database.first().foodRecipe)
+                    hideShimmerEffect()
+                } else {
+                    requestApiData()
+                }
+            })
+        }
     }
 
 
