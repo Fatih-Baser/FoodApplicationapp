@@ -73,7 +73,9 @@ class RecipesFragment : Fragment() {
                     response.data?.let { adapter.setData(it) }
                 }
                 is NetworkResult.Error -> {
+
                     hideShimmerEffect()
+                    loadDataFromCache()
 
                     Toast.makeText(requireContext(), response.message.toString(), Toast.LENGTH_SHORT).show()
                 }
@@ -91,6 +93,15 @@ class RecipesFragment : Fragment() {
         binding.shimmerFrameLayout.startShimmer()
         binding.shimmerFrameLayout.visibility = View.VISIBLE
         binding.recyclerview.visibility = View.GONE
+    }
+    private fun loadDataFromCache() {
+        lifecycleScope.launch {
+            viewModel.readRecipes.observe(viewLifecycleOwner, { database ->
+                if (database.isNotEmpty()) {
+                    adapter.setData(database.first().foodRecipe)
+                }
+            })
+        }
     }
 
     private fun hideShimmerEffect() {
