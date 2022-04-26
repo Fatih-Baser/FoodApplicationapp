@@ -16,6 +16,7 @@ import com.fatihbaserpl.foodapplication.RecipesViewModel
 import com.fatihbaserpl.foodapplication.adapters.RecipesAdapter
 import com.fatihbaserpl.foodapplication.databinding.FragmentRecipesBinding
 import com.fatihbaserpl.foodapplication.utils.NetworkResult
+import com.fatihbaserpl.foodapplication.utils.observeOnce
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -38,6 +39,8 @@ class RecipesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRecipesBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        binding.mainViewModel = viewModel
         setupRecyclerView()
         readDatabase()
         return binding.root
@@ -45,7 +48,7 @@ class RecipesFragment : Fragment() {
 
     private fun readDatabase() {
         lifecycleScope.launch {
-            viewModel.readRecipes.observe(viewLifecycleOwner, { database ->
+            viewModel.readRecipes.observeOnce(viewLifecycleOwner, { database ->
                 if (database.isNotEmpty() ) {
                     Log.d("RecipesFragment", "readDatabase called!")
                     adapter.setData(database.first().foodRecipe)
@@ -108,5 +111,10 @@ class RecipesFragment : Fragment() {
         binding.shimmerFrameLayout.stopShimmer()
         binding.shimmerFrameLayout.visibility = View.GONE
         binding.recyclerview.visibility = View.VISIBLE
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
     }
 }
