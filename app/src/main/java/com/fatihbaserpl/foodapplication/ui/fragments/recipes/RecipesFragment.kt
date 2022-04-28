@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fatihbaserpl.foodapplication.MainViewModel
 import com.fatihbaserpl.foodapplication.R
@@ -43,6 +44,14 @@ class RecipesFragment : Fragment() {
         binding.mainViewModel = viewModel
         setupRecyclerView()
         readDatabase()
+
+        binding.recipesFab.setOnClickListener {
+            //if (recipesViewModel.networkStatus) {
+                findNavController().navigate(R.id.action_recipesFragment_to_recipesBottomSheet)
+          //  } else {
+           //     recipesViewModel.showNetworkStatus()
+           // }
+        }
         return binding.root
     }
 
